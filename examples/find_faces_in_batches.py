@@ -15,10 +15,12 @@ import cv2
 # specific demo. If you have trouble installing it, try any of the other demos that don't require it instead.
 
 # Open video file
-video_capture = cv2.VideoCapture("short_hamilton_clip.mp4")
+video_capture = cv2.VideoCapture("hamilton_clip.mp4")
 
 frames = []
 frame_count = 0
+# Increasing this threshold consume more gpu memory and you can run out pretty fast (original value is 128)
+frames_threshold = 32
 
 while video_capture.isOpened():
     # Grab a single frame of video
@@ -36,7 +38,7 @@ while video_capture.isOpened():
     frames.append(frame)
 
     # Every 128 frames (the default batch size), batch process the list of frames to find faces
-    if len(frames) == 128:
+    if len(frames) == frames_threshold:
         batch_of_face_locations = face_recognition.batch_face_locations(frames, number_of_times_to_upsample=0)
 
         # Now let's list all the faces we found in all 128 frames

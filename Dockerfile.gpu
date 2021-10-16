@@ -5,16 +5,29 @@ FROM nvidia/cuda:9.0-cudnn7-devel
 
 # Install face recognition dependencies
 
+RUN apt update -y && apt install -y software-properties-common
+
 RUN apt update -y; apt install -y \
 git \
 cmake \
 libsm6 \
 libxext6 \
 libxrender-dev \
-python3 \
-python3-pip
+wget
 
-RUN pip3 install scikit-build
+# Install python3
+RUN apt install -y build-essential gdb lcov libbz2-dev libffi-dev \
+libgdbm-dev liblzma-dev libncurses5-dev libreadline6-dev \
+libsqlite3-dev libssl-dev lzma lzma-dev tk-dev uuid-dev zlib1g-dev
+
+RUN cd /tmp && \
+wget https://www.python.org/ftp/python/3.8.12/Python-3.8.12.tgz && \
+tar -xf Python-3.8.12.tgz && \
+cd Python-3.8.12 && \
+./configure --enable-optimizations && \
+make install -j && \
+python3 --version
+
 
 # Install compilers
 
@@ -25,7 +38,7 @@ RUN apt update -y; apt install -y gcc-6 g++-6
 RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 50
 RUN update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 50
 
-#Install dlib 
+#Install dlib
 
 RUN git clone -b 'v19.16' --single-branch https://github.com/davisking/dlib.git
 RUN mkdir -p /dlib/build
@@ -33,8 +46,10 @@ RUN mkdir -p /dlib/build
 RUN cmake -H/dlib -B/dlib/build -DDLIB_USE_CUDA=1 -DUSE_AVX_INSTRUCTIONS=1
 RUN cmake --build /dlib/build
 
-RUN cd /dlib; python3 /dlib/setup.py install
+
+RUN python3.8 -m pip install scikit-build
+RUN cd /dlib; python3.8 /dlib/setup.py install
 
 # Install the face recognition package
 
-RUN pip3 install face_recognition
+RUN python3.8 -m pip install face_recognition opencv-python

@@ -8,9 +8,9 @@ services:
     build:
       context: .
       #Uncomment this line to run the example on the GPU (requires Nvidia-Docker)
-      # dockerfile: Dockerfile.gpu
-    command: python3 -u find_faces_in_picture_cnn.py
+      dockerfile: Dockerfile.gpu
+    command: python3.8 -u find_faces_in_batches.py
     volumes:
       - ./:/face_recognition
     #Uncomment this line to run the example on the GPU (requires Nvidia-Docker)
-    # runtime: nvidia
+    runtime: nvidia

@@ -22,14 +22,31 @@ obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
 biden_image = face_recognition.load_image_file("biden.jpg")
 biden_face_encoding = face_recognition.face_encodings(biden_image)[0]
 
+# Load a custom samples and learn how to recognize them.
+bernardo_image = face_recognition.load_image_file("bernardo.jpg")
+bernardo_face_encoding = face_recognition.face_encodings(bernardo_image)[0]
+cristina_image = face_recognition.load_image_file("cristina.jpg")
+cristina_face_encoding = face_recognition.face_encodings(cristina_image)[0]
+elia_image = face_recognition.load_image_file("elia.jpg")
+elia_face_encoding = face_recognition.face_encodings(elia_image)[0]
+olivia_image = face_recognition.load_image_file("olivia.jpg")
+olivia_face_encoding = face_recognition.face_encodings(olivia_image)[0]
+
 # Create arrays of known face encodings and their names
 known_face_encodings = [
     obama_face_encoding,
-    biden_face_encoding
+    biden_face_encoding,
+    bernardo_face_encoding,
+    cristina_face_encoding,
+    elia_face_encoding,
+    olivia_face_encoding
 ]
 known_face_names = [
     "Barack Obama",
-    "Joe Biden"
+    "Joe Biden",
+    "Bernardo",
+    "Cristina",
+    "Elia"
 ]
 
 # Initialize some variables
@@ -57,7 +74,7 @@ while True:
         face_names = []
         for face_encoding in face_encodings:
             # See if the face is a match for the known face(s)
-            matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+            matches = face_recognition.compare_faces(known_face_encodings, face_encoding, tolerance=0.9)
             name = "Unknown"
 
             # # If a match was found in known_face_encodings, just use the first one.
